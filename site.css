@@ -218,3 +218,8 @@ footer { border-top: 1px solid var(--hair); padding-top: 40px; }
 .alt-cmd summary { cursor: pointer; width: fit-content; }
 .alt-cmd summary:hover { color: var(--ink); }
 .alt-cmd pre { margin-top: 10px; padding: 14px 16px; background: var(--code); border: 1px solid var(--grid); border-radius: var(--r-m); font: 13px/1.7 var(--mono); color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* arriving from "Install for Mac": the command box pulses once so the eye lands on it */
+@keyframes cmd-flash { 0%, 100% { box-shadow: 0 0 0 0 transparent; } 25%, 60% { box-shadow: 0 0 0 3px var(--green); } }
+#install:target .cmd { animation: cmd-flash 1.4s ease-out .35s 1; }
+@media (prefers-reduced-motion: reduce) { #install:target .cmd { animation: none; box-shadow: 0 0 0 2px var(--green); } }

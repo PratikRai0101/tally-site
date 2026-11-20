@@ -41,7 +41,7 @@ Mac menu bar utility sites (Stats, iStat Menus, Bartender, CodexBar and friends)
 ## Content
 
 - **Nav:** Menu bar · Panel · Privacy · Install · GitHub
-- **Hero:** as direction D (buttons, Dark switch, headline, live countdown, four columns).
+- **Hero:** as direction D (buttons, Dark switch, headline, live countdown, four columns). The primary button is "Install for Mac" and jumps to #install, where the command box pulses once (CSS `:target`); the zip stays in the Install section.
 - **In the menu bar.** h2 "Three small meters, next to the clock." Body: "One meter per plan, filling green, then amber, then red as you use it. Label each with the percent used, what it has cost, or its tokens, and end the row with today's total." Switch: Percent / Cost / Tokens (real menu bar crops: 31% 42% 2% $63.6 · $51.5 $11.0 $1.08 $63.6 · 99.2M 16.1M 120M $63.6). Footnote: "A green dot shows while an agent is running. ⌥⌘U opens the panel from anywhere."
 - **The panel.** h2 "Click a meter and the panel tells you the rest." Notes keyed to the real screenshot:
   1. Most headroom: "The plan with the most room right now. Here, OpenCode Go with 98% left."
