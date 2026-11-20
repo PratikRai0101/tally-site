@@ -50,7 +50,7 @@
     sx.globalCompositeOperation = "source-over"; sx.fillStyle = "#000"; sx.fillRect(0, 0, sw2, sh2); sx.globalCompositeOperation = "lighten";
     let mascotness = 0;
     for (const p of P) {
-      const d = p.j * 0.45, toB = ease(lin(t, 3.4 + d, 5.4 + d)), toI = ease(lin(t, 7.0 + (p.r / 20) * 0.7, 8.8 + (p.r / 20) * 0.7)), back = ease(lin(t, 12.0 + d, 14.2 + d));
+      const d = p.j * 0.45, toB = ease(lin(t, 2.2 + d, 4.2 + d)), toI = ease(lin(t, 7.0 + (p.r / 20) * 0.7, 8.8 + (p.r / 20) * 0.7)), back = ease(lin(t, 12.0 + d, 14.2 + d));
       let pos;
       const m = mascotPos(p), b = bloomPos(p, time), ic = iconPos(p);
       if (t < 7.0) pos = [mix(m[0], b[0], toB), mix(m[1], b[1], toB), mix(m[2], b[2], toB)];
@@ -65,9 +65,9 @@
       sx.fillStyle = g; sx.beginPath(); sx.arc(x, y, r, 0, 6.2832); sx.fill();
     }
     // the face: eyes cut out of the mascot, following the pointer; one blink per loop
-    mascotness = t < 8 ? 1 - ease(lin(t, 3.4, 4.0)) : ease(lin(t, 13.8, 14.6));
+    mascotness = t < 8 ? 1 - ease(lin(t, 2.2, 2.8)) : ease(lin(t, 13.8, 14.6));
     if (mascotness > 0.01) {
-      const { S, cy: mcy } = mFrame(), k = S / 320, blink = Math.max(0, 1 - Math.abs(t - 2.4) / 0.09) + Math.max(0, 1 - Math.abs(t - 15.2) / 0.09);
+      const { S, cy: mcy } = mFrame(), k = S / 320, blink = Math.max(0, 1 - Math.abs(t - 1.3) / 0.09) + Math.max(0, 1 - Math.abs(t - 15.2) / 0.09);
       sx.globalCompositeOperation = "source-over"; sx.fillStyle = `rgba(0,0,0,${mascotness})`;
       [116, 204].forEach((ex) => { const cx = sw2 / 2 + (ex - 160) * k + look[0] * 16 * k, cy = mcy + (156 - 160) * k + look[1] * 12 * k, w = 40 * k, h = 98 * k * (1 - 0.88 * Math.min(1, blink));
         sx.beginPath(); sx.roundRect(cx - w / 2, cy - h / 2, w, h, w / 2); sx.fill(); });
@@ -102,21 +102,44 @@
 
   // ---------- run the specimen and the clock ----------
   size(); drawClock();
-  addEventListener("resize", () => { size(); drawClock(); if (reduce) frame(1); });
-  new MutationObserver(() => { drawClock(); if (reduce) frame(1); drawWord(); }).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+  addEventListener("resize", () => { size(); drawClock(); if (typeof clock !== "undefined" && !playing) frame(clock); });
+  new MutationObserver(() => { drawClock(); if (typeof clock !== "undefined" && !playing) frame(clock); drawWord(); }).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
   hero.classList.add("live");
   const params = new URLSearchParams(location.search), fixed = params.has("t") ? +params.get("t") : null;
-  if (reduce) frame(1);
-  else {
-    let visible = true, t0 = performance.now(), paused = 0, last = t0;
-    new IntersectionObserver(([e]) => (visible = e.isIntersecting)).observe(hero);
-    (function tick(now) {
-      if (fixed !== null) { frame(fixed); return; }
-      if (visible && !document.hidden) frame((now - t0 - paused) / 1000); else paused += now - last;
-      last = now; requestAnimationFrame(tick);
-    })(performance.now());
-    setInterval(() => { if (!document.hidden) { left = Math.max(0, left - 1); drawClock(); } }, 1000);
+  // The loop opens on the icon (the same picture as the still image shown before this script runs),
+  // so the first thing a visitor sees is motion: the meters swirl into the mascot, which then blooms.
+  // The reel (play/pause, a dot per second, a timer) says it's playing and lets anyone pause it.
+  const START = 11.4, reel = document.getElementById("reel"), rbtn = document.getElementById("reelbtn"),
+    rdots = document.getElementById("reeldots"), rtime = document.getElementById("reeltime");
+  rdots.innerHTML = "<i></i>".repeat(LOOP); const dots = [...rdots.children];
+  let clock = reduce ? LOOP + 1 : START, playing = !reduce, visible = true, last = performance.now(), shown = -1, raf = 0;
+  const fmt = (x) => `0:${String(x).padStart(2, "0")}`;
+  function paintReel() {
+    const sec = Math.floor((clock - START) % LOOP);
+    if (sec === shown) return; shown = sec;
+    dots.forEach((d, i) => { d.className = i < sec ? "on" : i === sec ? "now" : ""; });
+    rtime.textContent = `${fmt(sec)} / ${fmt(LOOP)}`;
   }
+  function setPlaying(on) {
+    playing = on; reel.classList.toggle("paused", !on);
+    rbtn.setAttribute("aria-label", on ? "Pause the animation" : "Play the animation");
+    if (on && !raf) { last = performance.now(); raf = requestAnimationFrame(tick); }
+  }
+  function tick(now) {
+    raf = 0;
+    if (!playing) return;
+    if (visible && !document.hidden) { clock += Math.min(0.1, (now - last) / 1000); frame(clock); paintReel(); }
+    last = now; raf = requestAnimationFrame(tick);
+  }
+  rbtn.addEventListener("click", () => setPlaying(!playing));
+  new IntersectionObserver(([e]) => (visible = e.isIntersecting)).observe(hero);
+  if (fixed !== null) frame(fixed);
+  else {
+    reel.hidden = false; frame(clock); paintReel(); setPlaying(playing);
+    // a paused reel still answers the pointer: the mascot's eyes keep following it
+    hero.addEventListener("pointermove", () => { if (!playing) requestAnimationFrame(() => frame(clock)); });
+  }
+  setInterval(() => { if (!document.hidden && !reduce) { left = Math.max(0, left - 1); drawClock(); } }, 1000);
 
   // ---------- menu bar labels: percent / cost / tokens ----------
   const seg = [...document.querySelectorAll(".seg button")], shots = [...document.querySelectorAll("#mbplate img")];

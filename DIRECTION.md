@@ -78,3 +78,11 @@ Mac menu bar utility sites (Stats, iStat Menus, Bartender, CodexBar and friends)
 - Newsreader is self-hosted (`fonts/newsreader-latin.woff2`, latin subset, preloaded); no Google Fonts request.
 - Panel and treemap ship a 440 px 1× version via `srcset`; the 880 px originals serve 2× screens.
 - Lighthouse on the live site: 100 / 100 / 100 / 100 on mobile and desktop; mobile LCP 1.3 s, 227 KiB total.
+
+## The reel (2026-11-20)
+
+Visitors read the resting mascot as a still image and scrolled past before it bloomed. Fixes:
+- The loop now **opens on the icon** (t = 11.4 s of the 16 s loop, the same picture as `img/icon-still.webp`), so the first thing on screen is the meters swirling into the mascot.
+- The rest is shorter: the bloom starts at 2.2 s (was 3.4 s); the first blink is at 1.3 s.
+- A **reel** sits in the hero's bottom-right corner: pause/play, one dot per second (green = now), and a `0:04 / 0:16` timer. It also meets WCAG 2.2.2 (pause for motion over 5 s). On phones it shrinks to the button and timer. With reduced motion it starts paused on the mascot, and Play opts in.
+- `?t=<seconds>` still freezes a frame and hides the reel.
