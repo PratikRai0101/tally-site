@@ -86,3 +86,5 @@ Visitors read the resting mascot as a still image and scrolled past before it bl
 - The rest is shorter: the bloom starts at 2.2 s (was 3.4 s); the first blink is at 1.3 s.
 - A **reel** sits in the hero's bottom-right corner: pause/play, one dot per second (green = now), and a `0:04 / 0:16` timer. It also meets WCAG 2.2.2 (pause for motion over 5 s). On phones it shrinks to the button and timer. With reduced motion it starts paused on the mascot, and Play opts in.
 - `?t=<seconds>` still freezes a frame and hides the reel.
+
+**When you change `site.css` or `site.js`, bump the `?v=` on their links in `index.html`** (they are cached for an hour).
