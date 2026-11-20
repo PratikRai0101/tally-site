@@ -4,3 +4,4 @@
 assets/
 explore/
 shots/
+.env*
