@@ -1,0 +1,6 @@
+.DS_Store
+.vercel
+# working files, not served
+assets/
+explore/
+shots/

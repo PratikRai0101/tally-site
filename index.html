@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Tally: every AI plan's limit, in your Mac menu bar</title>
+<meta name="description" content="Tally is a free, open-source Mac menu bar app that shows how much of Claude, Codex and OpenCode Go you have left, when each limit resets, and whether you'll run out first.">
+<meta property="og:title" content="Tally: every AI plan's limit, in your Mac menu bar">
+<meta property="og:description" content="See what's left of Claude, Codex and OpenCode Go, when each resets, and whether you'll run out first. Free and open source.">
+<meta property="og:image" content="og.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="img/icon.png" type="image/png" sizes="256x256">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<script>try{var t=localStorage.getItem("tally-theme");document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="frame">
+  <header>
+    <a class="brand" href="#top" id="top"><img src="img/icon.png" alt="" width="26" height="26">Tally</a>
+    <nav aria-label="Main">
+      <a class="hide-s" href="#menubar">Menu bar</a>
+      <a class="hide-s" href="#panel">Panel</a>
+      <a class="hide-s" href="#privacy">Privacy</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com/PratikRai0101/tally">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="hero" id="hero" role="img" aria-label="Tally's mascot, drawn in dithered dots, blooms open and falls into the three meter columns of the Tally icon, then gathers back.">
+    <img class="still" src="img/icon-1024.png" alt="" aria-hidden="true" width="1024" height="1024">
+    <canvas id="spec"></canvas>
+  </div>
+
+  <main id="main">
+    <div class="bar">
+      <a class="btn" href="https://github.com/PratikRai0101/tally/releases/latest">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v9M4 7.5 8 11.5 12 7.5M2.5 14h11"/></svg>Download for Mac</a>
+      <a class="btn alt" href="https://github.com/PratikRai0101/tally">Star on GitHub</a>
+      <div class="switch-row"><span id="dl">Dark</span><button class="switch" id="theme" role="switch" aria-checked="false" aria-labelledby="dl"></button></div>
+    </div>
+
+    <section class="lede">
+      <h1>See what's left of every AI plan, long before you hit the limit.</h1>
+      <div class="meter" role="img" aria-label="Example: Claude session resets in 3 hours 51 minutes, 53% used">
+        <p><span>Claude session resets in</span><span class="n">53% used</span></p>
+        <canvas id="clock" aria-hidden="true"></canvas>
+      </div>
+    </section>
+
+    <section class="cols" aria-label="What Tally does">
+      <div><h2>Every plan, one bar</h2><p>Claude, Codex and OpenCode Go sit side by side in your menu bar, each as a small meter of what's used and what's left.</p></div>
+      <div><h2>Counted down to the reset</h2><p>Every session and weekly limit shows when it refills, to the minute, so you know whether to wait or switch.</p></div>
+      <div><h2>A warning before the wall</h2><p>Tally watches your pace and tells you when you'll run dry, while there's still time to finish the task.</p></div>
+      <div><h2>What it's really worth</h2><p>Your usage at API prices: <span class="n">$149</span> of Claude this week on a <span class="n">$20</span> plan. Free, open source, macOS 14+.</p></div>
+    </section>
+
+    <section class="sec grid" id="menubar" aria-labelledby="mb-h">
+      <div class="mb-words">
+        <h2 id="mb-h">Three small meters, next to the clock.</h2>
+        <p class="body">One meter per plan, filling green, then amber, then red as you use it. Label each with the percent used, what it has cost, or its tokens, and end the row with today's total.</p>
+        <div class="seg" role="group" aria-label="Label the meters with">
+          <button type="button" aria-pressed="true" data-i="0">Percent</button>
+          <button type="button" aria-pressed="false" data-i="1">Cost</button>
+          <button type="button" aria-pressed="false" data-i="2">Tokens</button>
+        </div>
+      </div>
+      <div class="mb-show">
+        <div class="mb-plate" id="mbplate">
+          <img class="on" src="img/menubar-0.webp" width="2352" height="170" alt="Menu bar meters labelled by percent used: Claude 31%, Codex 42%, OpenCode Go 2%, total $63.6.">
+          <img src="img/menubar-1.webp" width="2352" height="170" alt="Menu bar meters labelled by cost: Claude $51.5, Codex $11.0, OpenCode Go $1.08, total $63.6." loading="lazy">
+          <img src="img/menubar-2.webp" width="2352" height="170" alt="Menu bar meters labelled by tokens: Claude 99.2M, Codex 16.1M, OpenCode Go 120M, total $63.6." loading="lazy">
+        </div>
+        <p class="small">The real menu bar, enlarged. A green dot shows while an agent is running, and <kbd>⌥⌘U</kbd> opens the panel from anywhere.</p>
+      </div>
+    </section>
+
+    <section class="sec grid" id="panel" aria-labelledby="pn-h">
+      <div class="pn-words">
+        <h2 id="pn-h">Click a meter and the panel tells you the rest.</h2>
+        <ol class="notes" id="notes">
+          <li data-box="4.5,12,56,2.8"><h3>Most headroom</h3><p>The plan with the most room right now. Here, OpenCode Go with <span class="n">98%</span> left.</p></li>
+          <li data-box="4.5,28.2,91,3.6"><h3>Running now</h3><p>The session in progress and what it has cost so far: <span class="n">$17.55</span>.</p></li>
+          <li data-box="4.5,45.2,91,13.6"><h3>Session and weekly</h3><p>Percent used, the time to the reset, and a white tick where an even pace would put you.</p></li>
+          <li data-box="4.5,49.4,42,1.9"><h3>Runs out in ~4h 11m</h3><p>Worked out from your last hour of use, so you hear about it while there's still time to finish.</p></li>
+          <li data-box="4.5,59.6,91,2.2"><h3><span class="n">19×</span> value</h3><p><span class="n">$88.98</span> at API prices against <span class="n">$4.67</span> of a <span class="n">$20</span> plan, over the same seven days.</p></li>
+        </ol>
+      </div>
+      <div class="pn-show">
+        <figure class="pn-fig" id="pnfig">
+          <div class="shot">
+            <img src="img/panel.webp" width="880" height="1680" loading="lazy" alt="The Tally panel: $126.67 spent in 7 days; Claude Pro running now at $17.55 this session, session 13% used with 4h 22m to reset and a warning that it runs out in about 4h 11m, weekly 31%, 19× value; Codex on ChatGPT Plus at 42% weekly, ahead of pace.">
+            <div class="hl" id="hl" aria-hidden="true"></div>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <section class="sec grid" id="models" aria-labelledby="md-h">
+      <div class="md-show">
+        <img src="img/models.webp" width="880" height="770" loading="lazy" alt="Spend by model treemap for 7 days: claude-opus-5-5 70%, $88.97 via Claude; gpt-6.1-sol 13% via Codex; gpt-6.2-sol 8%; smaller shares via OpenAI and OpenCode Go.">
+      </div>
+      <div class="md-words">
+        <h2 id="md-h">Where the money went, by model and by the plan that paid.</h2>
+        <p class="body">A dithered treemap of the week. Here <code>claude-opus-5-5</code> took <span class="n">70%</span>, <span class="n">$88.97</span>, all of it on Claude Pro.</p>
+        <p class="body">Spend also groups by project, folding worktrees into their repo, and by tool, so Codex CLI and Pi on the same plan stay apart.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="privacy" aria-labelledby="rd-h">
+      <div class="grid">
+        <div class="rd-head"><h2 id="rd-h">It reads what your agents already write. Nothing else leaves your Mac.</h2></div>
+        <p class="rd-close body">No account, no analytics, no server. Each login goes only to its own provider, and Tally never refreshes or rewrites one.</p>
+      </div>
+      <div class="tables">
+        <div>
+          <table>
+            <caption>Plans it tracks</caption>
+            <thead><tr><th scope="col">Plan</th><th scope="col">Live limits</th><th scope="col">Usage from</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Claude<span>Pro, Max</span></th><td data-k="Limits">5-hour session, weekly, weekly per model</td><td data-k="From">Claude Code</td></tr>
+              <tr><th scope="row">Codex<span>ChatGPT Plus, Pro</span></th><td data-k="Limits">Session, weekly, reset credits</td><td data-k="From">Codex CLI, Pi</td></tr>
+              <tr><th scope="row">OpenCode Go</th><td data-k="Limits">Rolling 5 hours, weekly, monthly</td><td data-k="From">Pi, OpenCode</td></tr>
+              <tr><th scope="row">OpenCode Zen</th><td data-k="Limits">Spend only, free models</td><td data-k="From">OpenCode</td></tr>
+              <tr><th scope="row">OpenAI API</th><td data-k="Limits">Spend only</td><td data-k="From">Pi</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <table>
+            <caption>Where each number comes from</caption>
+            <thead><tr><th scope="col">Data</th><th scope="col">Source</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Spend, tokens</th><td>Session logs in <code>~/.claude/projects</code>, <code>~/.codex/sessions</code>, <code>~/.pi/agent/sessions</code> and OpenCode's <code>opencode.db</code></td></tr>
+              <tr><th scope="row">Claude limits</th><td>Claude Code's Keychain login, sent to Anthropic's usage endpoint</td></tr>
+              <tr><th scope="row">Codex limits</th><td><code>~/.codex/auth.json</code>, sent to ChatGPT's usage endpoint, or Codex's own logs</td></tr>
+              <tr><th scope="row">OpenCode Go</th><td>The Go API key from Pi or OpenCode, sent to OpenCode's usage endpoint</td></tr>
+              <tr><th scope="row">Prices</th><td>The LiteLLM price table, downloaded once</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec grid" id="install" aria-labelledby="in-h">
+      <div class="in-words">
+        <h2 id="in-h">Running in under a minute.</h2>
+        <p class="body">Paste this into Terminal. Tally unzips into Applications and its meters appear in the menu bar; there's no Dock icon. The first scan of your logs takes a few seconds.</p>
+      </div>
+      <div class="in-show">
+        <div class="cmd">
+          <div class="cmd-top"><span>Terminal</span><button class="copy" type="button" id="copy">Copy</button></div>
+          <pre id="cmd">curl -fsSL https://github.com/PratikRai0101/tally/releases/latest/download/Tally.zip -o /tmp/Tally.zip \
+  &amp;&amp; ditto -x -k /tmp/Tally.zip /Applications &amp;&amp; open /Applications/Tally.app</pre>
+        </div>
+        <div class="row">
+          <a class="btn" href="https://github.com/PratikRai0101/tally/releases/latest/download/Tally.zip">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v9M4 7.5 8 11.5 12 7.5M2.5 14h11"/></svg>Download Tally.zip</a>
+          <a href="https://github.com/PratikRai0101/tally#build-from-source">Or build it from source</a>
+        </div>
+        <ul class="reqs">
+          <li><b>macOS</b><span>14 Sonoma or later, Apple Silicon or Intel</span></li>
+          <li><b>Signed in to</b><span>at least one of Claude Code, Codex, Pi or OpenCode</span></li>
+          <li><b>Price</b><span>Free, MIT licence</span></li>
+        </ul>
+        <p class="note">Tally isn't notarized by Apple yet. The Terminal command works straight away. A zip downloaded in a browser needs one approval: System Settings → Privacy &amp; Security → Open Anyway.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="foot">
+      <div>
+        <h2>Tally</h2>
+        <p>An open-source Mac menu bar app for everyone who pays for more than one AI plan. MIT licence. Not affiliated with Anthropic, OpenAI or OpenCode.</p>
+      </div>
+      <div>
+        <h2>Next up</h2>
+        <ul><li>Grok Build usage</li><li>Signed, notarized builds</li><li>Daily and weekly budgets</li><li>CSV export</li><li>A desktop widget</li></ul>
+      </div>
+      <div>
+        <h2>Source</h2>
+        <ul>
+          <li><a href="https://github.com/PratikRai0101/tally">GitHub</a></li>
+          <li><a href="https://github.com/PratikRai0101/tally/releases">Releases</a></li>
+          <li><a href="https://github.com/PratikRai0101/tally/issues">Issues</a></li>
+          <li><a href="https://github.com/PratikRai0101/tally#contributing">Contributing</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="word" id="word" aria-hidden="true"><canvas id="wordc"></canvas></div>
+  </footer>
+</div>
+<script src="site.js" defer></script>
+</body>
+</html>
