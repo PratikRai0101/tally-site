@@ -70,3 +70,11 @@ Mac menu bar utility sites (Stats, iStat Menus, Bartender, CodexBar and friends)
 - **A new section:** use `<section class="sec grid">` with a words column and an artefact column (spans of 5 and 7, or 6 and 5, alternating sides). The h2 is in Newsreader; body text goes in `.body`.
 - **Debug params:** `?t=<seconds>` freezes the specimen, and `?note=<0-4>` outlines a panel note.
 - **Shots:** `shots/r4` and `shots/r3-dark`; the matrix is in `shots/r3/matrix`.
+
+## Performance (2026-11-20)
+
+- Hosted on Vercel (https://tally-site.vercel.app), auto-deploys from `main`. `vercel.json` sets cache headers: `fonts/` 1 year immutable, `img/` 30 days, icons and og 7 days, `site.css`/`site.js` 1 hour, HTML revalidates every time.
+- **Images are cached for 30 days, so give a changed image a new file name** (or visitors keep the old one).
+- Newsreader is self-hosted (`fonts/newsreader-latin.woff2`, latin subset, preloaded); no Google Fonts request.
+- Panel and treemap ship a 440 px 1× version via `srcset`; the 880 px originals serve 2× screens.
+- Lighthouse on the live site: 100 / 100 / 100 / 100 on mobile and desktop; mobile LCP 1.3 s, 227 KiB total.
