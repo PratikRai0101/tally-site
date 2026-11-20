@@ -17,7 +17,7 @@
 <link rel="icon" href="img/icon.png" type="image/png" sizes="256x256">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preload" href="fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=2">
+<link rel="stylesheet" href="site.css?v=3">
 <script>try{var t=localStorage.getItem("tally-theme");document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch(e){}</script>
 </head>
 <body>
@@ -160,14 +160,18 @@
     <section class="sec grid" id="install" aria-labelledby="in-h">
       <div class="in-words">
         <h2 id="in-h">Running in under a minute.</h2>
-        <p class="body">Paste this into Terminal. Tally unzips into Applications and its meters appear in the menu bar; there's no Dock icon. The first scan of your logs takes a few seconds.</p>
+        <p class="body">Paste this into Terminal. It fetches the latest release, checks its checksum, installs Tally into Applications and opens it. The meters appear in the menu bar; there's no Dock icon. The first scan of your logs takes a few seconds.</p>
       </div>
       <div class="in-show">
         <div class="cmd">
           <div class="cmd-top"><span>Terminal</span><button class="copy" type="button" id="copy">Copy</button></div>
-          <pre id="cmd">curl -fsSL https://github.com/PratikRai0101/tally/releases/latest/download/Tally.zip -o /tmp/Tally.zip \
-  &amp;&amp; ditto -x -k /tmp/Tally.zip /Applications &amp;&amp; open /Applications/Tally.app</pre>
+          <pre id="cmd">npx tally-menubar</pre>
         </div>
+        <details class="alt-cmd">
+          <summary>No Node? Use curl instead</summary>
+          <pre>curl -fsSL https://github.com/PratikRai0101/tally/releases/latest/download/Tally.zip -o /tmp/Tally.zip \
+  &amp;&amp; ditto -x -k /tmp/Tally.zip /Applications &amp;&amp; open /Applications/Tally.app</pre>
+        </details>
         <div class="row">
           <a class="btn" href="https://github.com/PratikRai0101/tally/releases/latest/download/Tally.zip">
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v9M4 7.5 8 11.5 12 7.5M2.5 14h11"/></svg>Download Tally.zip</a>
@@ -175,10 +179,11 @@
         </div>
         <ul class="reqs">
           <li><b>macOS</b><span>14 Sonoma or later, Apple Silicon or Intel</span></li>
+          <li><b>Node</b><span>18 or later, for the npx command</span></li>
           <li><b>Signed in to</b><span>at least one of Claude Code, Codex, Pi or OpenCode</span></li>
           <li><b>Price</b><span>Free, MIT licence</span></li>
         </ul>
-        <p class="note">Tally isn't notarized by Apple yet. The Terminal command works straight away. A zip downloaded in a browser needs one approval: System Settings → Privacy &amp; Security → Open Anyway.</p>
+        <p class="note">Tally isn't notarized by Apple yet. Both Terminal commands work straight away. A zip downloaded in a browser needs one approval: System Settings → Privacy &amp; Security → Open Anyway.</p>
       </div>
     </section>
   </main>

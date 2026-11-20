@@ -212,3 +212,9 @@ footer { border-top: 1px solid var(--hair); padding-top: 40px; }
   .switch[aria-checked="true"] { background: Highlight; }
   .seg button[aria-pressed="true"] { border: 2px solid Highlight; }
 }
+
+/* install: the curl fallback, folded under the npx command */
+.alt-cmd { margin-top: 12px; font-size: 14px; color: var(--muted); }
+.alt-cmd summary { cursor: pointer; width: fit-content; }
+.alt-cmd summary:hover { color: var(--ink); }
+.alt-cmd pre { margin-top: 10px; padding: 14px 16px; background: var(--code); border: 1px solid var(--grid); border-radius: var(--r-m); font: 13px/1.7 var(--mono); color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; }
