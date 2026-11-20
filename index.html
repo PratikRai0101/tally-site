@@ -16,9 +16,7 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="img/icon.png" type="image/png" sizes="256x256">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="site.css">
 <script>try{var t=localStorage.getItem("tally-theme");document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch(e){}</script>
 </head>
@@ -26,7 +24,7 @@
 <a class="skip" href="#main">Skip to content</a>
 <div class="frame">
   <header>
-    <a class="brand" href="#top" id="top"><img src="img/icon.png" alt="" width="26" height="26">Tally</a>
+    <a class="brand" href="#top" id="top"><img src="img/icon-64.webp" alt="" width="26" height="26">Tally</a>
     <nav aria-label="Main">
       <a class="hide-s" href="#menubar">Menu bar</a>
       <a class="hide-s" href="#panel">Panel</a>
@@ -37,7 +35,7 @@
   </header>
 
   <div class="hero" id="hero" role="img" aria-label="Tally's mascot, drawn in dithered dots, blooms open and falls into the three meter columns of the Tally icon, then gathers back.">
-    <img class="still" src="img/icon-1024.png" alt="" aria-hidden="true" width="1024" height="1024">
+    <img class="still" src="img/icon-still.webp" fetchpriority="low" alt="" aria-hidden="true" width="1024" height="1024">
     <canvas id="spec"></canvas>
   </div>
 
@@ -98,7 +96,7 @@
       <div class="pn-show">
         <figure class="pn-fig" id="pnfig">
           <div class="shot">
-            <img src="img/panel.webp" width="880" height="1680" loading="lazy" alt="The Tally panel: $126.67 spent in 7 days; Claude Pro running now at $17.55 this session, session 13% used with 4h 22m to reset and a warning that it runs out in about 4h 11m, weekly 31%, 19× value; Codex on ChatGPT Plus at 42% weekly, ahead of pace.">
+            <img src="img/panel.webp" srcset="img/panel-440.webp 440w, img/panel.webp 880w" sizes="(max-width: 480px) calc(100vw - 32px), 440px" width="880" height="1680" loading="lazy" alt="The Tally panel: $126.67 spent in 7 days; Claude Pro running now at $17.55 this session, session 13% used with 4h 22m to reset and a warning that it runs out in about 4h 11m, weekly 31%, 19× value; Codex on ChatGPT Plus at 42% weekly, ahead of pace.">
             <div class="hl" id="hl" aria-hidden="true"></div>
           </div>
         </figure>
@@ -107,7 +105,7 @@
 
     <section class="sec grid" id="models" aria-labelledby="md-h">
       <div class="md-show">
-        <img src="img/models.webp" width="880" height="770" loading="lazy" alt="Spend by model treemap for 7 days: claude-opus-5-5 70%, $88.97 via Claude; gpt-6.1-sol 13% via Codex; gpt-6.2-sol 8%; smaller shares via OpenAI and OpenCode Go.">
+        <img src="img/models.webp" srcset="img/models-440.webp 440w, img/models.webp 880w" sizes="(max-width: 672px) calc(100vw - 32px), 640px" width="880" height="770" loading="lazy" alt="Spend by model treemap for 7 days: claude-opus-5-5 70%, $88.97 via Claude; gpt-6.1-sol 13% via Codex; gpt-6.2-sol 8%; smaller shares via OpenAI and OpenCode Go.">
       </div>
       <div class="md-words">
         <h2 id="md-h">Where the money went, by model and by the plan that paid.</h2>
